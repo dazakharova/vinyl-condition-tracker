@@ -28,9 +28,9 @@ func recordCreate(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/{$}", home)
-	mux.HandleFunc("/record/view/{id}", recordView)
-	mux.HandleFunc("/record/create", recordCreate)
+	mux.HandleFunc("GET /{$}", home)
+	mux.HandleFunc("GET /record/view/{id}", recordView)
+	mux.HandleFunc("GET /record/create", recordCreate)
 
 	log.Println("Starting server on port :4000")
 
