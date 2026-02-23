@@ -8,7 +8,17 @@ import (
 	"strconv"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
+func (app *application) home(w http.ResponseWriter, r *http.Request) {
+	records, err := app.records.Latest()
+	if err != nil {
+		println("DB error!")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
+
+	data := templateData{
+		Records: records,
+	}
+
 	files := []string{
 		"./ui/html/base.tmpl",
 		"./ui/html/pages/home.tmpl",
@@ -21,7 +31,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ts.ExecuteTemplate(w, "base", nil)
+	err = ts.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, "internal Server Error", http.StatusInternalServerError)

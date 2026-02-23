@@ -1,14 +1,25 @@
 {{define "title"}}Home{{end}}
 
 {{define "main"}}
-<h2>Latest Records</h2>
-
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Created</th>
-        <th>ID</th>
-    </tr>
-</table>
-<p>There's nothing to see here yet!</p>
+    <h2>Latest Records</h2>
+    {{if .Records}}
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Created</th>
+            <th>Updated</th>
+        </tr>
+        {{range .Records}}
+        <tr>
+            <td><a href='/record/view/{{.ID}}'>{{.Title}}</a></td>
+            <td>{{.Artist}}</td>
+            <td>{{.CreatedAt}}</td>
+            <td>{{.UpdatedAt}}</td>
+        </tr>
+        {{end}}
+    </table>
+    {{else}}
+    <p>There's nothing to see here yet!</p>
+    {{end}}
 {{end}}
