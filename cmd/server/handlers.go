@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -12,7 +11,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	records, err := app.records.Latest()
 	if err != nil {
 		println("DB error!")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		app.serverError(w, r, err)
 	}
 
 	data := templateData{
@@ -26,15 +25,13 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "internal Server Error", http.StatusInternalServerError)
+		app.serverError(w, r, err)
 		return
 	}
 
 	err = ts.ExecuteTemplate(w, "base", data)
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "internal Server Error", http.StatusInternalServerError)
+		app.serverError(w, r, err)
 	}
 }
 

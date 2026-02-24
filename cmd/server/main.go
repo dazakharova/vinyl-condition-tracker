@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -12,6 +12,7 @@ import (
 
 type application struct {
 	records models.RecordModel
+	logger  *slog.Logger
 }
 
 func main() {
@@ -25,20 +26,25 @@ func main() {
 		dbPath = "./data/pedro.db"
 	}
 
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+
 	db, err := openDB(dbPath)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error((err.Error()))
+		os.Exit(1)
 	}
 	defer db.Close()
 
 	app := &application{
 		records: models.RecordModel{DB: db},
+		logger:  logger,
 	}
 
-	log.Printf("Starting server on port :%s", port)
+	logger.Info("starting server", slog.String("port", port))
 
 	err = http.ListenAndServe(":"+port, app.routes())
-	log.Fatal(err)
+	logger.Error((err.Error()))
+	os.Exit(1)
 }
 
 func openDB(dsn string) (*sql.DB, error) {
