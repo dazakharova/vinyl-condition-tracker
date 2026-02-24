@@ -14,8 +14,8 @@
         <tr>
             <td><a href='/record/view/{{.ID}}'>{{.Title}}</a></td>
             <td>{{.Artist}}</td>
-            <td>{{.CreatedAt}}</td>
-            <td>{{.UpdatedAt}}</td>
+            <td>{{humanDate .CreatedAt}}</td>
+            <td>{{humanDate .UpdatedAt}}</td>
         </tr>
         {{end}}
     </table>

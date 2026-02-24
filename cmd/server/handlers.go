@@ -7,6 +7,10 @@ import (
 	"strconv"
 )
 
+var functions = template.FuncMap{
+	"humanDate": humanDate,
+}
+
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	records, err := app.records.Latest()
 	if err != nil {
@@ -23,7 +27,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/pages/home.tmpl",
 	}
 
-	ts, err := template.ParseFiles(files...)
+	ts, err := template.New("home").Funcs(functions).ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
