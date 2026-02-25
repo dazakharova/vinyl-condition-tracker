@@ -7,6 +7,12 @@ import (
 	"strconv"
 )
 
+//type RecordCreateForm struct {
+//	Title               string `json:"title"`
+//	Artist              string `json:"artist"`
+//	validator.Validator `form:"-"`
+//}
+
 var functions = template.FuncMap{
 	"humanDate": humanDate,
 }
@@ -50,6 +56,19 @@ func recordView(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(msg))
 }
 
-func recordCreate(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display a form for creating a new record"))
+func (app *application) recordCreate(w http.ResponseWriter, r *http.Request) {
+	files := []string{
+		"./ui/html/base.tmpl",
+		"./ui/html/pages/create.tmpl",
+	}
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	err = ts.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		app.serverError(w, r, err)
+	}
 }
