@@ -50,3 +50,18 @@ func (m *RecordModel) Latest() ([]Record, error) {
 
 	return records, nil
 }
+
+func (m *RecordModel) Insert(title, artist string) (int, error) {
+	stmt := "INSERT INTO records (title, artist) VALUES (?, ?)"
+	result, err := m.DB.Exec(stmt, title, artist)
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	
+	return int(id), nil
+}

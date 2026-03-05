@@ -8,6 +8,7 @@ import (
 
 type templateData struct {
 	Records []models.Record
+	Form    any
 }
 
 func humanDate(t time.Time) string {
