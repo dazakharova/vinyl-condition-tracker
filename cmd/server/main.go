@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"html/template"
 	"log/slog"
 	"net/http"
 	"os"
@@ -11,8 +12,9 @@ import (
 )
 
 type application struct {
-	records models.RecordModel
-	logger  *slog.Logger
+	records       models.RecordModel
+	logger        *slog.Logger
+	templateCache map[string]*template.Template
 }
 
 func main() {
@@ -35,9 +37,16 @@ func main() {
 	}
 	defer db.Close()
 
+	templateCache, err := newTemplateCache()
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+
 	app := &application{
-		records: models.RecordModel{DB: db},
-		logger:  logger,
+		records:       models.RecordModel{DB: db},
+		logger:        logger,
+		templateCache: templateCache,
 	}
 
 	logger.Info("starting server", slog.String("port", port))

@@ -15,10 +15,6 @@ type RecordCreateForm struct {
 	validator.Validator `form:"-"`
 }
 
-var functions = template.FuncMap{
-	"humanDate": humanDate,
-}
-
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	records, err := app.records.Latest()
 	if err != nil {
@@ -93,27 +89,10 @@ func (app *application) recordCreatePost(w http.ResponseWriter, r *http.Request)
 	if !form.Valid() {
 		var data templateData
 		data.Form = form
-		app.logger.Info("Invalid form")
-
-		// Render form once again <- here must be reusable render() function to avoid duplicating
-		files := []string{
-			"./ui/html/base.tmpl",
-			"./ui/html/pages/create.tmpl",
-		}
-		ts, err := template.ParseFiles(files...)
-		if err != nil {
-			app.serverError(w, r, err)
-			return
-		}
-
-		err = ts.ExecuteTemplate(w, "base", data)
-		if err != nil {
-			app.serverError(w, r, err)
-		}
+		app.render(w, r, http.StatusUnprocessableEntity, "create.tmpl", data)
 		return
 	}
-
-	app.logger.Info("Valid form")
+	
 	_, err = app.records.Insert(form.Title, form.Artist)
 	if err != nil {
 		app.serverError(w, r, err)
