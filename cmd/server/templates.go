@@ -10,6 +10,7 @@ import (
 
 type templateData struct {
 	Records []models.Record
+	Record  models.Record
 	Form    any
 }
 

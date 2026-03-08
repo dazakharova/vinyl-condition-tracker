@@ -1,11 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
 	"strconv"
 
+	"github.com/dazakharova/vinyl-condition-tracker/internal/models"
 	"github.com/dazakharova/vinyl-condition-tracker/internal/validator"
 )
 
@@ -43,15 +45,27 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func recordView(w http.ResponseWriter, r *http.Request) {
+func (app *application) recordView(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil || id < 1 {
 		http.NotFound(w, r)
 		return
 	}
 
-	msg := fmt.Sprintf("Display a specific record with ID %d", id)
-	w.Write([]byte(msg))
+	record, err := app.records.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	data := app.newTemplateData()
+	data.Record = record
+
+	app.render(w, r, http.StatusOK, "view.tmpl", data)
 }
 
 func (app *application) recordCreate(w http.ResponseWriter, r *http.Request) {
@@ -92,7 +106,7 @@ func (app *application) recordCreatePost(w http.ResponseWriter, r *http.Request)
 		app.render(w, r, http.StatusUnprocessableEntity, "create.tmpl", data)
 		return
 	}
-	
+
 	_, err = app.records.Insert(form.Title, form.Artist)
 	if err != nil {
 		app.serverError(w, r, err)

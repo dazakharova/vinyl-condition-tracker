@@ -1,0 +1,15 @@
+{{define "title"}}Record{{end}}
+{{define "main"}}
+    {{with .Record}}
+    <div>
+        <div class='metadata'>
+            <strong>{{.Title}}</strong>
+            <span>{{.Artist}}</span>
+        </div>
+        <div>
+            <time>Created: {{humanDate .CreatedAt}}</time>
+            <time>Last updated: {{humanDate .UpdatedAt}}</time>
+        </div>
+    </div>
+    {{end}}
+{{end}}
