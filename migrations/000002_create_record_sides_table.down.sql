@@ -1,0 +1,1 @@
+DELETE TABLE IF EXISTS record_sides;
