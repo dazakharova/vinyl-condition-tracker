@@ -13,7 +13,7 @@ import (
 
 type application struct {
 	records       models.RecordModel
-	recordSides   models.RecordModel
+	recordSides   models.RecordSideModel
 	logger        *slog.Logger
 	templateCache map[string]*template.Template
 }
@@ -46,7 +46,7 @@ func main() {
 
 	app := &application{
 		records:       models.RecordModel{DB: db},
-		recordSides:   models.RecordModel{DB: db},
+		recordSides:   models.RecordSideModel{DB: db},
 		logger:        logger,
 		templateCache: templateCache,
 	}

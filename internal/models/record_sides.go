@@ -28,3 +28,34 @@ func (m *RecordSideModel) Insert(recordID int, name string) (int, error) {
 
 	return int(id), nil
 }
+
+func (m *RecordSideModel) Get(recordID int) ([]RecordSide, error) {
+	stmt := "SELECT id, record_id, name FROM record_sides WHERE record_id = ?"
+	rows, err := m.DB.Query(stmt, recordID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var recordSides []RecordSide
+
+	for rows.Next() {
+		var rs RecordSide
+		err := rows.Scan(
+			&rs.ID,
+			&rs.RecordID,
+			&rs.Name,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		recordSides = append(recordSides, rs)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return recordSides, nil
+}

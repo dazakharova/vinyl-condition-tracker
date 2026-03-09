@@ -12,4 +12,12 @@
         </div>
     </div>
     {{end}}
+    <div>
+        <h3>Sides</h3>
+        <ul>
+            {{range .Sides}}
+                <li>Side {{.Name}}</li>
+            {{end}}
+        </ul>
+    </div>
 {{end}}

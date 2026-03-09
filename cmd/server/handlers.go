@@ -63,8 +63,15 @@ func (app *application) recordView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sides, err := app.recordSides.Get(id)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
 	data := app.newTemplateData()
 	data.Record = record
+	data.Sides = sides
 
 	app.render(w, r, http.StatusOK, "view.tmpl", data)
 }
@@ -110,7 +117,6 @@ func (app *application) recordCreatePost(w http.ResponseWriter, r *http.Request)
 	form.CheckField(form.NotBlank(form.Sides), "sides", "Sides amount cannot be blank")
 	form.CheckField(form.IsInt(form.Sides), "sides", "Sides amount must be a whole number")
 	form.CheckField(form.GreaterThan(form.Sides, 0), "sides", "Sides amount must be greater than 0")
-	form.CheckField(form.IsEven(form.Sides), "sides", "Sides amount must be an even number")
 
 	if !form.Valid() {
 		data := app.newTemplateData()
@@ -134,7 +140,7 @@ func (app *application) recordCreatePost(w http.ResponseWriter, r *http.Request)
 	}
 
 	for _, name := range sideNames {
-		_, err = app.recordSides.Insert(strconv.Itoa(recordID), name)
+		_, err = app.recordSides.Insert(recordID, name)
 		if err != nil {
 			app.serverError(w, r, err)
 			return
