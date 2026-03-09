@@ -1,6 +1,7 @@
 package validator
 
 import (
+	"strconv"
 	"strings"
 	"unicode/utf8"
 )
@@ -35,4 +36,25 @@ func (v *Validator) NotBlank(value string) bool {
 
 func (v *Validator) MaxChars(value string, n int) bool {
 	return utf8.RuneCountInString(value) <= n
+}
+
+func (v *Validator) IsInt(value string) bool {
+	_, err := strconv.Atoi(value)
+	return err == nil
+}
+
+func (v *Validator) GreaterThan(value string, min int) bool {
+	n, err := strconv.Atoi(value)
+	if err != nil {
+		return false
+	}
+	return n > min
+}
+
+func (v *Validator) IsEven(value string) bool {
+	n, err := strconv.Atoi(value)
+	if err != nil {
+		return false
+	}
+	return n%2 == 0
 }

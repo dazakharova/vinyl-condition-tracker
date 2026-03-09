@@ -43,3 +43,11 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, status in
 func (app *application) newTemplateData() templateData {
 	return templateData{}
 }
+
+func generateSideNames(count int) []string {
+	names := make([]string, 0, count)
+	for i := 0; i < count; i++ {
+		names = append(names, string(rune('A'+i)))
+	}
+	return names
+}

@@ -9,9 +9,10 @@ import (
 )
 
 type templateData struct {
-	Records []models.Record
-	Record  models.Record
-	Form    any
+	Records     []models.Record
+	Record      models.Record
+	RecordSides int
+	Form        any
 }
 
 var functions = template.FuncMap{
