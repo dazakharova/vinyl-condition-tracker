@@ -1,28 +1,46 @@
 {{define "title"}}Home{{end}}
 
 {{define "main"}}
-    <h2>Latest Records</h2>
+<section class="page page-home">
+    <div class="page-header">
+        <div>
+            <p class="page-eyebrow">Collection</p>
+            <h2 class="page-title">Latest Records</h2>
+        </div>
+
+        <a class="btn btn-primary" href="/record/create">Add New</a>
+    </div>
+
     {{if .Records}}
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Created</th>
-            <th>Updated</th>
-        </tr>
-        {{range .Records}}
-        <tr>
-            <td><a href='/record/view/{{.ID}}'>{{.Title}}</a></td>
-            <td>{{.Artist}}</td>
-            <td>{{humanDate .CreatedAt}}</td>
-            <td>{{humanDate .UpdatedAt}}</td>
-        </tr>
-        {{end}}
-    </table>
+        <div class="card table-card">
+            <div class="table-wrap">
+                <table class="records-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Artist</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Records}}
+                        <tr>
+                            <td><a class="table-link" href="/record/view/{{.ID}}">{{.Title}}</a></td>
+                            <td>{{.Artist}}</td>
+                            <td>{{humanDate .CreatedAt}}</td>
+                            <td>{{humanDate .UpdatedAt}}</td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     {{else}}
-    <p>There's nothing to see here yet!</p>
+        <div class="card empty-state">
+            <p class="empty-state__text">There's nothing to see here yet!</p>
+            <a class="btn btn-primary" href="/record/create">Add your first record</a>
+        </div>
     {{end}}
-    <p>
-        <a href="/record/create">Add New</a>
-    </p>
+</section>
 {{end}}

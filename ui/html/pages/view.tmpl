@@ -1,23 +1,42 @@
 {{define "title"}}Record{{end}}
+
 {{define "main"}}
+<section class="page page-record-view">
     {{with .Record}}
-    <div>
-        <div class='metadata'>
-            <strong>{{.Title}}</strong>
-            <span>{{.Artist}}</span>
+    <article class="card record-detail">
+        <div class="record-detail__header">
+            <div class="record-detail__identity">
+                <p class="page-eyebrow">Record</p>
+                <h2 class="record-detail__title">{{.Title}}</h2>
+                <p class="record-detail__artist">{{.Artist}}</p>
+            </div>
         </div>
-        <div>
-            <time>Created: {{humanDate .CreatedAt}}</time>
-            <time>Last updated: {{humanDate .UpdatedAt}}</time>
+
+        <div class="record-meta">
+            <div class="record-meta__item">
+                <span class="record-meta__label">Created</span>
+                <time class="record-meta__value">{{humanDate .CreatedAt}}</time>
+            </div>
+            <div class="record-meta__item">
+                <span class="record-meta__label">Last updated</span>
+                <time class="record-meta__value">{{humanDate .UpdatedAt}}</time>
+            </div>
         </div>
-    </div>
+    </article>
     {{end}}
-    <div>
-        <h3>Sides</h3>
-        <ul>
+
+    <section class="card sides-card">
+        <div class="section-header">
+            <h3 class="section-title">Sides</h3>
+        </div>
+
+        <ul class="side-list">
             {{range .Sides}}
-                <li>Side {{.Name}}</li>
+            <li class="side-list__item">
+                <span class="side-badge">Side {{.Name}}</span>
+            </li>
             {{end}}
         </ul>
-    </div>
+    </section>
+</section>
 {{end}}

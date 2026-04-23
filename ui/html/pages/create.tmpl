@@ -1,30 +1,63 @@
 {{define "title"}}Create a New Record{{end}}
 
 {{define "main"}}
-<form action='/record/create' method='POST'>
-    <div>
-        <label>Title:</label>
-        {{with .Form.FieldErrors.title}}
-        <label>{{.}}</label>
-        {{end}}
-        <input type='text' name='title' value='{{.Form.Title}}'>
-    </div>
-    <div>
-        <label>Artist:</label>
-        {{with .Form.FieldErrors.artist}}
-        <label>{{.}}</label>
-        {{end}}
-        <input type='text' name='artist' value='{{.Form.Artist}}'>
-    </div>
-    <div>
-            <label>Number of sides:</label>
-            {{with .Form.FieldErrors.sides}}
-            <label>{{.}}</label>
-            {{end}}
-            <input type='number' name='sides' step='2' min='2' value='{{.Form.Sides}}'>
+<section class="page page-create-record">
+    <div class="page-header">
+        <div>
+            <p class="page-eyebrow">Collection</p>
+            <h2 class="page-title">Create a New Record</h2>
         </div>
-    <div>
-        <input type='submit' value='Create record'>
     </div>
-</form>
+
+    <div class="card form-card">
+        <form class="form" action="/record/create" method="POST" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="title">Title</label>
+                {{with .Form.FieldErrors.title}}
+                    <p class="form-error">{{.}}</p>
+                {{end}}
+                <input
+                    class="form-input"
+                    id="title"
+                    type="text"
+                    name="title"
+                    value="{{.Form.Title}}">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="artist">Artist</label>
+                {{with .Form.FieldErrors.artist}}
+                    <p class="form-error">{{.}}</p>
+                {{end}}
+                <input
+                    class="form-input"
+                    id="artist"
+                    type="text"
+                    name="artist"
+                    value="{{.Form.Artist}}">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="sides">Number of sides</label>
+                {{with .Form.FieldErrors.sides}}
+                    <p class="form-error">{{.}}</p>
+                {{end}}
+                <input
+                    class="form-input"
+                    id="sides"
+                    type="number"
+                    name="sides"
+                    step="2"
+                    min="2"
+                    value="{{.Form.Sides}}">
+                <p class="form-hint">Use even numbers, for example 2 or 4.</p>
+            </div>
+
+            <div class="form-actions">
+                <input class="btn btn-primary" type="submit" value="Create record">
+                <a class="btn btn-secondary" href="/">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
 {{end}}
